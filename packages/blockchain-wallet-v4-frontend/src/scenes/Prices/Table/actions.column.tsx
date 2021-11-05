@@ -14,6 +14,9 @@ const CellWrapper = styled.div`
   justify-content: flex-start;
   padding-right: 8px;
 `
+const NoAction = styled.div`
+  padding-left: 32px;
+`
 
 export const getActionsColumn = (
   modalActions: TableColumnsType['modalActions'],
@@ -22,44 +25,48 @@ export const getActionsColumn = (
   Cell: ({ row: { original: values } }) => (
     <CellWrapper>
       {values.products.includes('CustodialWalletBalance') ? (
-        <Button
-          data-e2e={`${values.coin}BuySellBtn`}
-          height='32px'
-          nature='primary'
-          onClick={() => {
-            buySellActions.showModal({
-              cryptoCurrency: values.coin,
-              orderType: OrderType.BUY,
-              origin: 'Prices'
-            })
-          }}
-          width='96px'
-          style={{ marginRight: '12px' }}
-        >
-          <Text size='14px' color='white' weight={600}>
-            {Number(values.balance) > 0 ? (
-              <FormattedMessage id='buttons.buy_sell' defaultMessage='Buy & Sell' />
-            ) : (
-              <FormattedMessage id='buttons.buy' defaultMessage='Buy' />
-            )}
-          </Text>
-        </Button>
-      ) : null}
-      <Button
-        data-e2e={`${values.coin}SwapBtn`}
-        height='32px'
-        nature='empty-blue'
-        onClick={() =>
-          modalActions.showModal('SWAP_MODAL', {
-            origin: 'Prices'
-          })
-        }
-        width='68px'
-      >
-        <Text size='14px' color='blue600' weight={600}>
-          <FormattedMessage id='buttons.swap' defaultMessage='Swap' />
-        </Text>
-      </Button>
+        <>
+          <Button
+            data-e2e={`${values.coin}BuySellBtn`}
+            height='32px'
+            nature='primary'
+            onClick={() => {
+              buySellActions.showModal({
+                cryptoCurrency: values.coin,
+                orderType: OrderType.BUY,
+                origin: 'Prices'
+              })
+            }}
+            width='96px'
+            style={{ marginRight: '12px' }}
+          >
+            <Text size='14px' color='white' weight={600}>
+              {Number(values.balance) > 0 ? (
+                <FormattedMessage id='buttons.buy_sell' defaultMessage='Buy & Sell' />
+              ) : (
+                <FormattedMessage id='buttons.buy' defaultMessage='Buy' />
+              )}
+            </Text>
+          </Button>
+          <Button
+            data-e2e={`${values.coin}SwapBtn`}
+            height='32px'
+            nature='empty-blue'
+            onClick={() =>
+              modalActions.showModal('SWAP_MODAL', {
+                origin: 'Prices'
+              })
+            }
+            width='68px'
+          >
+            <Text size='14px' color='blue600' weight={600}>
+              <FormattedMessage id='buttons.swap' defaultMessage='Swap' />
+            </Text>
+          </Button>
+        </>
+      ) : (
+        <NoAction>-</NoAction>
+      )}
     </CellWrapper>
   ),
   Header: () => (

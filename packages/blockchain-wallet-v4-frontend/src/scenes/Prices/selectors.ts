@@ -24,6 +24,11 @@ export const getData = createDeepEqualSelector(
         const currentPrice = coinPrices[coinfig.symbol]
         const yesterdayPrice = coinPricesPrevious[coinfig.symbol]
         const coinBalance = getBalanceSelector(coinfig.symbol)(state).getOrElse(0).valueOf()
+        const priceChangeNumber = Number(((currentPrice - yesterdayPrice) / yesterdayPrice) * 100)
+        const priceChangeString = Number.isNaN(priceChangeNumber)
+          ? '0'
+          : priceChangeNumber.toPrecision(2)
+
         return {
           balance:
             coinfig.type.name === 'ERC20'
@@ -33,9 +38,7 @@ export const getData = createDeepEqualSelector(
           coinModel: coin,
           name: `${coinfig.name} (${coinfig.displaySymbol})`,
           price: currentPrice,
-          priceChange: Number(((currentPrice - yesterdayPrice) / yesterdayPrice) * 100).toPrecision(
-            2
-          ),
+          priceChange: priceChangeString,
           products: coinfig.products
         }
       })
