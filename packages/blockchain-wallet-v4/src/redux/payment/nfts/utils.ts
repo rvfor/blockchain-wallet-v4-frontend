@@ -43,6 +43,7 @@ export const ENJIN_ADDRESS = '0xfaaFDc07907ff5120a76b34b731b278c38d6043C'
 export const ENJIN_COIN_ADDRESS = '0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c'
 const WETH_ADDRESS = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
 const WYVERN_TOKEN_PAYMENT_PROXY = '0xe5c783ee536cf5e63e792988335c4255169be4e1'
+const BLOCKCHAIN_REFERRER_ADDRESS = NULL_BLOCK_HASH // TODO: change into the active blockchain referral address.
 
 export const bigNumberToBN = (value: BigNumber) => {
   return new BN(value.toString(), 10)
@@ -2023,7 +2024,7 @@ export async function _atomicMatch({
       buy.s || NULL_BLOCK_HASH,
       sell.r || NULL_BLOCK_HASH,
       sell.s || NULL_BLOCK_HASH,
-      NULL_BLOCK_HASH
+      BLOCKCHAIN_REFERRER_ADDRESS
     ]
   ]
 
@@ -2173,6 +2174,7 @@ export async function createSellOrder(
     startAmount: startPrice, // only supports Ether Sales at the moment due to hardcoded conversion in _getPricingParameters)
     waitForHighestBid
   })
+  order.metadata.referrerAddress = BLOCKCHAIN_REFERRER_ADDRESS // Setting the Blockchain referral address in the order objects metadata.
   // 2. Validation of sell order fields & Transaction Approvals (Proxy initialized here if needed also)
   const validatedAndApproved = await _sellOrderValidationAndApprovals({ order, signer })
   console.log(`Successful approvals and validations?: ${validatedAndApproved}`)
@@ -2336,7 +2338,7 @@ export async function calculateAtomicMatchFees(order: Order, counterOrder: Order
       order.s || NULL_BLOCK_HASH,
       counterOrder.r || NULL_BLOCK_HASH,
       counterOrder.s || NULL_BLOCK_HASH,
-      NULL_BLOCK_HASH
+      BLOCKCHAIN_REFERRER_ADDRESS
     ]
   ]
   const wyvernExchangeContract = new ethers.Contract(
