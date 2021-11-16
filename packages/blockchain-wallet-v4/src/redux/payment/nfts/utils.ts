@@ -43,7 +43,8 @@ export const ENJIN_ADDRESS = '0xfaaFDc07907ff5120a76b34b731b278c38d6043C'
 export const ENJIN_COIN_ADDRESS = '0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c'
 const WETH_ADDRESS = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
 const WYVERN_TOKEN_PAYMENT_PROXY = '0xe5c783ee536cf5e63e792988335c4255169be4e1'
-const BLOCKCHAIN_REFERRER_ADDRESS = NULL_BLOCK_HASH // TODO: change into the active blockchain referral address.
+const BLOCKCHAIN_REFERRER_ADDRESS =
+  '0x6bc4020839fe3fbafce9380384c2fa40945a79df000000000000000000000000' // TODO: Change into correct address with 0 padding.
 
 export const bigNumberToBN = (value: BigNumber) => {
   return new BN(value.toString(), 10)
@@ -246,7 +247,7 @@ export const encodeReplacementPattern = (
     const cValue =
       value !== undefined ? value : generateDefaultValue(ethABI_local.elementaryName(type))
     return ethABI_local.isDynamic(type)
-      ? Buffer.alloc(32)
+      ? Buffer.alloc(64)
       : Buffer.from(ethers.utils.defaultAbiCoder.encode([type], [cValue]).substring(2), 'hex').fill(
           bitmask
         )
